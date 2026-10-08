@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="container">
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-icon">⌁</span><span>WiFi <b>Share</b></span></a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">☀ Light</button>
+  </header>
+
+  <section class="hero">
+    <div><p class="eyebrow">LOCAL NETWORK FILE TRANSFER</p><h1>Fast, Private &amp; <span>Local</span> File Sharing</h1>
+    <p class="hero-copy">Share files between devices on the same Wi-Fi or LAN. No cloud account, mobile data, or internet connection is needed.</p></div>
+    <div class="status"><span class="pulse"></span><div><b>Local server ready</b><small>Both devices must be on the same network</small></div></div>
+  </section>
+
+  <section class="stats" aria-label="File statistics">
+    <article><span>📂</span><div><b id="totalFiles">0</b><small>Total Files</small></div></article>
+    <article><span>💾</span><div><b id="totalSize">0 B</b><small>Storage Used</small></div></article>
+    <article><span>✓</span><div><b id="availableFiles">0</b><small>Available Now</small></div></article>
+  </section>
+
+  <section class="dashboard-grid">
+    <article class="card network-card">
+      <div class="card-heading"><div><p class="eyebrow">NETWORK ADDRESS</p><h2>Connect another device</h2></div><span class="wifi-mark">⌁</span></div>
+      <p>Open this address on a phone or laptop connected to the same local network.</p>
+      <div class="url-box"><code id="localUrl">{{ local_url }}</code><button id="copyButton">Copy link</button></div>
+      <p class="notice">● Local network sharing only — internet is not required.</p>
+      <div class="connect-steps"><b>How to connect</b><ol><li>Connect both devices to the same Wi-Fi.</li><li>Open the address above or scan the QR code.</li><li>Upload or download from any connected device.</li></ol></div>
+    </article>
+
+    <article class="card qr-card"><p class="eyebrow">SCAN TO CONNECT</p><div class="qr-wrap" id="qrCode" aria-label="QR code for local address">{% if qr_code %}<img src="{{ qr_code }}" alt="QR code for {{ local_url }}">{% else %}<small>QR code unavailable.<br>Use the local address.</small>{% endif %}</div><p>Use your phone camera to open WiFi Share.</p></article>
+  </section>
+
+  <section class="card upload-card">
+    <div class="section-title"><div><p class="eyebrow">SEND A FILE</p><h2>Upload to this device</h2></div><span>Maximum {{ max_upload_mb }} MB</span></div>
+    <form id="uploadForm">
+      <label class="drop-zone" id="dropZone" for="fileInput"><input id="fileInput" name="file" type="file" accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png,.gif,.mp3,.mp4,.zip,.rar,.csv"><span class="upload-icon">⇧</span><b>Drop your file here or <em>browse</em></b><small>PDF, documents, images, media, archives and CSV files</small></label>
+      <div class="file-preview" id="filePreview" hidden><span id="selectedIcon">📁</span><div><b id="selectedName"></b><small id="selectedMeta"></small></div><button type="button" id="clearFile">×</button></div>
+      <div class="progress-area" id="progressArea" hidden><div><span id="progressText">Uploading...</span><span id="progressPercent">0%</span></div><div class="progress-track"><i id="progressBar"></i></div></div>
+      <button class="primary-button" id="uploadButton" type="submit">Upload File <span>→</span></button>
+    </form>
+  </section>
+
+  <section class="card files-card">
+    <div class="files-header"><div><p class="eyebrow">SHARED STORAGE</p><h2>Available Files</h2></div><div class="controls"><input id="searchInput" type="search" placeholder="Search files..." aria-label="Search files"><select id="sortSelect" aria-label="Sort files"><option value="date">Newest first</option><option value="name">Name</option><option value="size">Size</option></select></div></div>
+    <div id="filesList" class="files-list"><p class="empty-state">Loading files…</p></div>
+  </section>
+</main>
+<div id="toast" class="toast" role="status"></div>
+<script>window.WIFI_SHARE_URL = "{{ local_url }}";</script>
+{% endblock %}
